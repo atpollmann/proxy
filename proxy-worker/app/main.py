@@ -3,8 +3,6 @@ from starlette.responses import Response
 from endpoint import endpoint
 import httpx
 
-## HELLO MY MAN
-
 DESTINATION_ENDPOINT:str = endpoint
 
 async def app(scope, receive, send):

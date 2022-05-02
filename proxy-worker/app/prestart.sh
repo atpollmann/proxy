@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-echo "RUNNING redis-server"
+echo "starting redis server"
 redis-server --daemonize yes --replicaof redis_master 6379

@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  master:
+    image: "redis:6.0.16"
+    container_name: "meli-proxy-redis-master"
+    hostname: redis_master
+    networks:
+      - meli-proxy-net
+  worker-node-1:
+    build: ./proxy-worker
+    depends_on:
+      - master
+    container_name: "meli-proxy-worker-1"
+    hostname: "meli-proxy-worker-1"
+    ports:
+      - "8000:80"
+    volumes:
+      - "./proxy-worker/app:/app:cached"
+    networks:
+      - meli-proxy-net
+  worker-node-2:
+    build: ./proxy-worker
+    depends_on:
+      - master
+    container_name: "meli-proxy-worker-2"
+    hostname: "meli-proxy-worker-2"
+    ports:
+      - "8001:80"
+    volumes:
+      - "./proxy-worker/app:/app:cached"
+    networks:
+      - meli-proxy-net
+networks:
+  meli-proxy-net:
