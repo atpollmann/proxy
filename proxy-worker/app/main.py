@@ -1,6 +1,6 @@
 from starlette.requests import Request
 from starlette.responses import Response
-from endpoint import endpoint
+from .endpoint import endpoint
 import httpx
 
 DESTINATION_ENDPOINT:str = endpoint
