@@ -1,6 +1,6 @@
 FROM tiangolo/uvicorn-gunicorn-starlette:python3.9
 
-COPY ./proxy-worker /app
+COPY ./request-worker /app
 WORKDIR /app
 
 RUN apt-get update

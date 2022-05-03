@@ -1,8 +1,9 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+FROM python:3.9-alpine3.14
 
-COPY ./control-app /app
+COPY ./control-worker /app
 
 WORKDIR /app
 
-RUN apt-get update
 RUN pip3 install --upgrade pip --no-cache-dir -r requirements.txt
+
+CMD ["python", "main.py"]

@@ -5,8 +5,12 @@ name = "pypi"
 
 [packages]
 uvicorn = "*"
+pymongo = {extras = ["srv"], version = "*"}
+redis = "*"
+pika = "*"
 
 [dev-packages]
+autopep8 = "*"
 
 [requires]
 python_version = "3.9"

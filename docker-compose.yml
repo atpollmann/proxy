@@ -1,38 +1,49 @@
 version: "3.8"
 services:
-  master:
+  cache-master:
     image: "redis:6.0.16"
-    container_name: "meli-proxy-redis-master"
-    hostname: redis_master
+    container_name: "${HOST_CACHE_MASTER}"
+    hostname: "${HOST_CACHE_MASTER}"
     networks:
-      - meli-proxy-net
-  worker-node-1:
-    build: ./proxy-worker
+      - proxy-net
+  control-db:
+    image: "mongo"
+    restart: always
+    hostname: "${HOST_CONTROL_DB}"
+    container_name: "${HOST_CONTROL_DB}"
+    ports:
+      - "27017:27017"
+    networks:
+      - "proxy-net"
+  broker:
+    image: "rabbitmq:3"
+    hostname: "${HOST_BROKER}"
+    container_name: "${HOST_BROKER}"
+    networks:
+      - proxy-net
+  request-worker-1:
+    build: ./request-worker
     depends_on:
-      - master
-    container_name: "meli-proxy-worker-1"
-    hostname: "meli-proxy-worker-1"
+      - cache-master
+    container_name: "request-worker-1"
+    hostname: "request-worker-1"
     ports:
       - "8000:80"
+    environment:
+      - HOST_BROKER=${HOST_BROKER}
+      - EXCHANGE_NAME=${EXCHANGE_NAME}
     networks:
-      - meli-proxy-net
-  worker-node-2:
-    build: ./proxy-worker
+      - proxy-net
+  control-worker:
+    build: ./control-worker
+    container_name: "control-worker-1"
+    hostname: "control-worker-1"
+    environment:
+      - HOST_BROKER=${HOST_BROKER}
+      - EXCHANGE_NAME=${EXCHANGE_NAME}
     depends_on:
-      - master
-    container_name: "meli-proxy-worker-2"
-    hostname: "meli-proxy-worker-2"
-    ports:
-      - "8001:80"
+      - cache-master
     networks:
-      - meli-proxy-net
-  control-app:
-    build: ./control-app
-    container_name: "meli-proxy-control-app"
-    hostname: "meli-proxy-control-app"
-    ports:
-      - "8002:80"
-    networks:
-      - meli-proxy-net
+      - proxy-net
 networks:
-  meli-proxy-net:
+  proxy-net:

@@ -1,0 +1,6 @@
+import os
+
+HOST_CACHE_MASTER = os.getenv("HOST_CACHE_MASTER")
+HOST_CONTROL_DB = os.getenv("HOST_CONTROL_DB")
+HOST_BROKER = os.getenv("HOST_BROKER")
+EXCHANGE_NAME = os.getenv("EXCHANGE_NAME")
