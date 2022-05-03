@@ -16,9 +16,11 @@ services:
     networks:
       - "proxy-net"
   broker:
-    image: "rabbitmq:3"
+    image: "rabbitmq:3-management-alpine"
     hostname: "${HOST_BROKER}"
     container_name: "${HOST_BROKER}"
+    ports:
+      - "15672:15672"
     networks:
       - proxy-net
   request-worker-1:
