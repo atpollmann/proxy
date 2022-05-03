@@ -14,8 +14,6 @@ services:
     hostname: "meli-proxy-worker-1"
     ports:
       - "8000:80"
-    volumes:
-      - "./proxy-worker/app:/app:cached"
     networks:
       - meli-proxy-net
   worker-node-2:
@@ -26,8 +24,14 @@ services:
     hostname: "meli-proxy-worker-2"
     ports:
       - "8001:80"
-    volumes:
-      - "./proxy-worker/app:/app:cached"
+    networks:
+      - meli-proxy-net
+  control-app:
+    build: ./control-app
+    container_name: "meli-proxy-control-app"
+    hostname: "meli-proxy-control-app"
+    ports:
+      - "8002:80"
     networks:
       - meli-proxy-net
 networks:
