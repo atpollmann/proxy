@@ -44,37 +44,30 @@ def process_request(body):
     # Obtain all entry types only in one call: rules and counter
     docs = list(access_list.find({"ip": request["ip"], "path": request["path"]}))
 
+    first_entry = {
+        "type": "counter",
+        "ip": request["ip"],
+        "path": request["path"],
+        "count": 1,
+        "first": timestamp,
+        "last": timestamp
+    }
+
+    counter_increment = {'$inc': {'count': 1}, '$set': {'last': timestamp}}
+
     if len(docs) == 0:
         # We dont have any entry on the access list. Insert the first
-        access_list.insert_one(
-            {
-                "type": "counter",
-                "ip": request["ip"],
-                "path": request["path"],
-                "count": 1,
-                "first": timestamp,
-                "last": timestamp
-            }
-        )
+        access_list.insert_one(first_entry)
     elif len(docs) == 1:
         if docs[0]["type"] == "rule":
             # If is a rule, insert counter and return
-            access_list.insert_one(
-                {
-                    "type": "counter",
-                    "ip": request["ip"],
-                    "path": request["path"],
-                    "count": 1,
-                    "first": timestamp,
-                    "last": timestamp
-                }
-            )
+            access_list.insert_one(first_entry)
             return
         else:
             # It's a counter, increment it
             access_list.update_one(
                 {"_id": docs[0]["_id"]},
-                {'$inc': {'count': 1}, '$set': {'last': timestamp}}
+                counter_increment
             )
     else:
         # We have a rule AND a counter that must be processed
@@ -84,7 +77,7 @@ def process_request(body):
         if can_continue(rule, counter):
             access_list.update_one(
                 {"_id": counter["_id"]},
-                {'$inc': {'count': 1}, '$set': {'last': timestamp}}
+                counter_increment
             )
         else:
             # Client exceeded rate. Deny access
