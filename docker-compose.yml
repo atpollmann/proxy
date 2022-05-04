@@ -34,6 +34,7 @@ services:
     environment:
       - HOST_BROKER=${HOST_BROKER}
       - EXCHANGE_NAME=${EXCHANGE_NAME}
+      - HOST_CACHE_MASTER=${HOST_CACHE_MASTER}
     networks:
       - proxy-net
   control-worker:
@@ -44,6 +45,7 @@ services:
       - HOST_BROKER=${HOST_BROKER}
       - EXCHANGE_NAME=${EXCHANGE_NAME}
       - HOST_CONTROL_DB=${HOST_CONTROL_DB}
+      - HOST_CACHE_MASTER=${HOST_CACHE_MASTER}
     depends_on:
       - cache-master
     networks:

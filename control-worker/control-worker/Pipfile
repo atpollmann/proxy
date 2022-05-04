@@ -11,6 +11,7 @@ pika = "*"
 
 [dev-packages]
 autopep8 = "*"
+bpython = "*"
 
 [requires]
 python_version = "3.9"
