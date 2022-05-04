@@ -1,3 +1,4 @@
+import redis
 import httpx
 import pika
 import json
@@ -8,6 +9,7 @@ from endpoint import endpoint
 from config import EXCHANGE_NAME, HOST_BROKER
 
 DESTINATION_ENDPOINT: str = endpoint
+redisClient = redis.Redis()
 
 
 async def app(scope, receive, send):
@@ -23,7 +25,15 @@ async def app(scope, receive, send):
     print("REQUEST WORKER: message send to exchange")
     connection.close()
 
-    url = DESTINATION_ENDPOINT + request.url.path
-    content = httpx.get(url)
-    response = Response(content.text, media_type="application/json")
+    hit = redisClient.get(f"{request.client.host}{request.url.path}")
+    redisClient.close()
+
+    if hit:
+        print("Found hit in local storage. Access denied")
+        response = Response(status_code=429)
+    else:
+        url = DESTINATION_ENDPOINT + request.url.path
+        content = httpx.get(url)
+        response = Response(content.text, media_type="application/json")
+
     await response(scope, receive, send)

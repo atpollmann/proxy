@@ -71,7 +71,9 @@ def process_request(docs):
             "value": "got here"
         }
     )
-    redisClient.set(f"{docs[0]['ip']}{docs[0]['path']}", "deny")
+    key = f"{docs[0]['ip']}{docs[0]['path']}"
+    redisClient.set(key, "deny")
+    redisClient.expire(key, 5)
 
 
 if __name__ == '__main__':

@@ -8,6 +8,7 @@ starlette = "*"
 uvicorn = "*"
 httpx = "*"
 pika = "*"
+redis = "*"
 
 [dev-packages]
 autopep8 = "*"
