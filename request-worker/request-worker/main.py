@@ -30,7 +30,12 @@ async def app(scope, receive, send):
         response = Response(content.text, media_type="application/json")
 
     channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='fanout')
-    message = {'ip': request.client.host, 'path': request.url.path, 'allow': hit is None}
+    message = {
+        'ip': request.client.host,
+        'path': request.url.path,
+        'method': request.method,
+        'allow': hit is None
+    }
 
     channel.basic_publish(exchange=EXCHANGE_NAME, routing_key='', body=json.dumps(message))
     print("REQUEST WORKER: message send to exchange")

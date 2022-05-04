@@ -48,6 +48,7 @@ services:
       - HOST_CACHE_MASTER=${HOST_CACHE_MASTER}
     depends_on:
       - cache-master
+      - broker
     networks:
       - proxy-net
   control-api-rest:
@@ -58,6 +59,18 @@ services:
       - "8080:80"
     environment:
       - HOST_CONTROL_DB=${HOST_CONTROL_DB}
+    networks:
+      - proxy-net
+  analytics-worker:
+    build: ./analytics-worker
+    container_name: "analytics-worker-1"
+    hostname: "analytics-worker-1"
+    environment:
+      - HOST_ANALYTICS_DB=${HOST_ANALYTICS_DB}
+      - HOST_BROKER=${HOST_BROKER}
+      - EXCHANGE_NAME=${EXCHANGE_NAME}
+    depends_on:
+      - broker
     networks:
       - proxy-net
 networks:

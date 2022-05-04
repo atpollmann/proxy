@@ -1,0 +1,4 @@
+-i https://pypi.org/simple
+dnspython==2.2.1
+pika==1.2.1
+pymongo[srv]==4.1.1
