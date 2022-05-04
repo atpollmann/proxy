@@ -1,24 +1,24 @@
 version: "3.8"
 services:
   cache-master:
-    image: redis:6.0.16
-    container_name: ${HOST_CACHE_MASTER}
-    hostname: ${HOST_CACHE_MASTER}
+    image: "redis:6.0.16"
+    container_name: "${HOST_CACHE_MASTER}"
+    hostname: "${HOST_CACHE_MASTER}"
     networks:
       - proxy-net
   control-db:
-    image: mongo
+    image: "mongo"
     restart: always
-    hostname: ${HOST_CONTROL_DB}
-    container_name: ${HOST_CONTROL_DB}
+    hostname: "${HOST_CONTROL_DB}"
+    container_name: "${HOST_CONTROL_DB}"
     ports:
       - "27017:27017"
     networks:
       - proxy-net
   broker:
-    image: rabbitmq:3-management-alpine
-    hostname: ${HOST_BROKER}
-    container_name: ${HOST_BROKER}
+    image: "rabbitmq:3-management-alpine"
+    hostname: "${HOST_BROKER}"
+    container_name: "${HOST_BROKER}"
     ports:
       - "15672:15672"
     networks:
@@ -27,8 +27,8 @@ services:
     build: ./request-worker
     depends_on:
       - cache-master
-    container_name: request-worker-1
-    hostname: request-worker-1
+    container_name: "request-worker-1"
+    hostname: "request-worker-1"
     ports:
       - "8000:80"
     environment:
@@ -39,8 +39,8 @@ services:
       - proxy-net
   control-worker:
     build: ./control-worker
-    container_name: control-worker-1
-    hostname: control-worker-1
+    container_name: "control-worker-1"
+    hostname: "control-worker-1"
     environment:
       - HOST_BROKER=${HOST_BROKER}
       - EXCHANGE_NAME=${EXCHANGE_NAME}
@@ -52,8 +52,8 @@ services:
       - proxy-net
   control-api-rest:
     build: ./control-api-rest
-    container_name: control-api-rest
-    hostname: control-api-rest
+    container_name: "control-api-rest"
+    hostname: "control-api-rest"
     ports:
       - "8080:80"
     environment:
