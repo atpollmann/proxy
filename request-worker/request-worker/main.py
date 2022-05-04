@@ -3,6 +3,7 @@ import httpx
 import pika
 import json
 
+from datetime import datetime
 from starlette.requests import Request
 from starlette.responses import Response
 from endpoint import endpoint
@@ -30,7 +31,9 @@ async def app(scope, receive, send):
         response = Response(content.text, media_type="application/json")
 
     channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='fanout')
+    date = datetime.now()
     message = {
+        'datetime': date.isoformat(),
         'ip': request.client.host,
         'path': request.url.path,
         'method': request.method,

@@ -73,5 +73,15 @@ services:
       - broker
     networks:
       - proxy-net
+  analytics-api-rest:
+    build: ./analytics-api-rest
+    container_name: "analytics-api-rest"
+    hostname: "analytics-api-rest"
+    ports:
+      - "8081:80"
+    environment:
+      - HOST_ANALYTICS_DB=${HOST_ANALYTICS_DB}
+    networks:
+      - proxy-net
 networks:
   proxy-net:

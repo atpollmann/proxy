@@ -153,7 +153,6 @@
             "version": "==1.9.0"
         },
         "pymongo": {
-            "extras": [],
             "hashes": [
                 "sha256:019a4c13ef1d9accd08de70247068671b116a0383adcd684f6365219f29f41cd",
                 "sha256:07f50a3b8a3afb086089abcd9ab562fb2a27b63fd7017ca13dfe7b663c8f3762",
