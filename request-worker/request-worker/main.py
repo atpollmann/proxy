@@ -18,13 +18,6 @@ async def app(scope, receive, send):
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=HOST_BROKER))
     channel = connection.channel()
 
-    channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='fanout')
-    message = {'ip': request.client.host, 'path': request.url.path}
-
-    channel.basic_publish(exchange=EXCHANGE_NAME, routing_key='', body=json.dumps(message))
-    print("REQUEST WORKER: message send to exchange")
-    connection.close()
-
     hit = redisClient.get(f"{request.client.host}{request.url.path}")
     redisClient.close()
 
@@ -35,5 +28,13 @@ async def app(scope, receive, send):
         url = DESTINATION_ENDPOINT + request.url.path
         content = httpx.get(url)
         response = Response(content.text, media_type="application/json")
+
+    channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='fanout')
+    message = {'ip': request.client.host, 'path': request.url.path, 'allow': hit is None}
+
+    channel.basic_publish(exchange=EXCHANGE_NAME, routing_key='', body=json.dumps(message))
+    print("REQUEST WORKER: message send to exchange")
+    print(json.dumps(message))
+    connection.close()
 
     await response(scope, receive, send)
