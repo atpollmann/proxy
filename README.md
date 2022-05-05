@@ -86,6 +86,18 @@ Consist of a throttling rule for a given ip/path pair. In it, its defined an ip,
 
 There are no graphical interfaces implemented in this proxy. However, the following screens are recommended
 
+### Live view of the traffic load
+
+![Live View](/assets/live_view.png?raw=true)
+
+### Logs
+
+![Logs View](/assets/logs_view.png?raw=true)
+
+### Logs
+
+![Access Rules](/assets/rules_view.png?raw=true)
+
 # How to test the proxy
 
 Clone this repo and run `docker-compose up` from the root of the project. Once all the containers are deployed, make several requests to the local port 8000 (i.e.: `http://localhost:8000/categories/MLC4075`).
